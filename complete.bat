@@ -1,0 +1,1 @@
+cmd /c "dart compile exe .\bin\server.dart & .\bin\server.exe"

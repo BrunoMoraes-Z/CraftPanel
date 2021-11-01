@@ -1,0 +1,1 @@
+cmd /c ".\bin\server.exe"
