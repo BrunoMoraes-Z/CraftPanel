@@ -36,6 +36,7 @@ class MineServer {
       'server_id': id,
       'server_name': serverName,
       'server_port': serverPort,
+      'server_version': version,
       'min_ram': minRam,
       'max_ram': maxRam,
       'provider': provider,

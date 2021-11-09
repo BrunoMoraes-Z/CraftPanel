@@ -7,8 +7,9 @@ import 'package:craft_panel/common/game/mine_server.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:uuid/uuid.dart';
-import '../../common/addons/response_addon.dart';
 import 'package:path/path.dart' as path;
+import '../../common/addons/response_addon.dart';
+import '../../common/constants.dart';
 
 class ServerService {
   static Handler get route {
@@ -63,6 +64,27 @@ class ServerService {
       return MyResponse().ok(serverConfig);
     });
 
+    // Deletar servidor
+    route.delete('/<serverId>', (Request request, String serverId) async {
+      var validId = validator(serverId);
+      if (validId != null) return validId;
+
+      var serverDir = Directory.fromUri(
+        Uri.directory(path.join(config.servers_dir, serverId)),
+      );
+
+      if (gameLog!.servers.containsKey(serverId)) {
+        await gameLog!.servers[serverId]!.stop();
+        gameLog!.servers.remove(serverId);
+      }
+
+      await serverDir.delete(recursive: true);
+
+      return MyResponse().ok({
+        'message': 'Servidor deletado com sucesso.',
+      });
+    });
+
     // Notificar utilização do enpoint.
     route.put('/', (Request request) async {
       return MyResponse().notFound(
@@ -101,10 +123,19 @@ class ServerService {
             ).readAsStringSync(),
           );
 
+          bool status = gameLog!.servers.containsKey(content['server_id']);
+
           svs.add(
             {
               "server_id": content['server_id'],
-              "server_name": content['server_name'],
+              "online": status,
+              "info": {
+                "server_name": content['server_name'],
+                "server_port": content['server_port'],
+                "server_version": content['server_version'],
+                "max_ram": content['max_ram'],
+                "provider": content['provider'],
+              },
             },
           );
         });

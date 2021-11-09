@@ -115,7 +115,7 @@ class ActionService {
       }
     });
 
-    // Executar comando no servidor
+    // Desliga o servidor
     route.delete('/<serverId>', (Request request, String serverId) async {
       var validId = validator(serverId);
       if (validId != null) return validId;
