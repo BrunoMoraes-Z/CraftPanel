@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:craft_panel/common/addons/fix_cors.dart';
 import 'package:craft_panel/common/constants.dart';
 import 'package:craft_panel/common/files/config_file.dart';
@@ -27,11 +29,18 @@ void main(List<String> args) async {
 
   app.mount('/', Routes().router);
 
+  var context = SecurityContext();
+  context.useCertificateChain('${sysDir.path}/certificates/certificate.pem',
+      password: 'teste');
+  context.usePrivateKey('${sysDir.path}/certificates/certificate.key',
+      password: 'teste');
+
   var server = await io.serve(
     handler,
     await localMachineIP(),
     3000,
     shared: true,
+    securityContext: context,
   );
 
   print('Server running on ${server.address.host}:${server.port}\n');
