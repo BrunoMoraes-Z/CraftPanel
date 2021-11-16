@@ -12,7 +12,7 @@ void loadUsers() {
       'users': [
         {
           'username': 'admin',
-          'password': 'vfGtEcxLgoKmQ6kfmY8rjA==',
+          'password': '21232f297a57a5a743894a0e4a801fc3',
           'permissions': Permission.values.map((e) => e.toString()).toList(),
         },
       ]

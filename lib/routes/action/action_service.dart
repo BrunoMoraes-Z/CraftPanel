@@ -143,6 +143,29 @@ class ActionService {
       );
     });
 
+    // Desliga o servidor
+    route.post('/<serverId>/kill', (Request request, String serverId) async {
+      var validId = validator(serverId);
+      if (validId != null) return validId;
+
+      if (!gameLog!.running(serverId)) {
+        return MyResponse().notFound(
+          {
+            'message': 'Server não esta ligado no momento.',
+          },
+        );
+      }
+
+      final server = gameLog!.servers[serverId];
+      await server!.kill();
+
+      return MyResponse().ok(
+        {
+          'message': 'Servidor desligado.',
+        },
+      );
+    });
+
     return route;
   }
 }

@@ -16,7 +16,7 @@ dependencies:
   process_run: ^0.10.2
   gson: ^0.1.2
   dart_jsonwebtoken: ^2.4.0
-  encrypt: ^5.0.1
+  crypto: ^3.0.1
 
 dev_dependencies:
   # lints: ^1.0.0

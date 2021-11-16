@@ -81,6 +81,9 @@ class MineServer {
     process.stdout.transform(utf8.decoder).listen((event) {
       event.split('\r\n').forEach((element) {
         if (element.trim().isNotEmpty) {
+          if (logs.length + 1 > 1000) {
+            logs.removeRange(0, 250);
+          }
           logs.add(element);
         }
       });
@@ -101,6 +104,31 @@ class MineServer {
     }
     await run('stop');
     await process.exitCode;
+    gameLog!.servers.remove(id);
+  }
+
+  Future<dynamic>? kill() async {
+    if (!gameLog!.running(id)) {
+      return {'message': 'Server is not running!'};
+    }
+    await run('save-all');
+    if (Platform.isWindows) {
+      await Process.run(
+        'taskkill',
+        [
+          '/f',
+          '/pid',
+          process.pid.toString(),
+        ],
+      );
+    } else {
+      await Process.run(
+        'kill',
+        [
+          process.pid.toString(),
+        ],
+      );
+    }
     gameLog!.servers.remove(id);
   }
 

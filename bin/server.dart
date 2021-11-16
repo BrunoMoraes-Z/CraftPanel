@@ -29,14 +29,17 @@ void main(List<String> args) async {
 
   app.mount('/', Routes().router);
 
-  var context = SecurityContext();
-  context.useCertificateChain(
-    '${sysDir.path}/certificates/server_chain.pem',
-  );
-  context.usePrivateKey(
-    '${sysDir.path}/certificates/server_key.pem',
-    password: 'onix',
-  );
+  SecurityContext? context;
+  if (isHttps()) {
+    context = SecurityContext();
+    context.useCertificateChain(
+      '${sysDir.path}/server_chain.pem',
+    );
+    context.usePrivateKey(
+      '${sysDir.path}/server_key.pem',
+      password: 'onix',
+    );
+  }
 
   var server = await io.serve(
     handler,

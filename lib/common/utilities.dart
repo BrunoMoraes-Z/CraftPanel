@@ -1,11 +1,21 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:encrypt/encrypt.dart';
 import 'package:craft_panel/common/constants.dart';
+import 'package:crypto/crypto.dart';
 
 String encodePassword(String password) {
-  return Encrypter(AES(key)).encrypt(password, iv: IV.fromLength(16)).base64;
-  // print(encripter.decrypt64(hash.base64, iv: iv));
+  return md5.convert(utf8.encode(password)).toString();
+}
+
+bool isHttps() {
+  var chain = File.fromUri(
+    Uri.file('${sysDir.path}/server_chain.pem'),
+  ).existsSync();
+  var key = File.fromUri(
+    Uri.file('${sysDir.path}/server_key.pem'),
+  ).existsSync();
+  return chain && key;
 }
 
 Future<String> localMachineIP() async {
