@@ -112,6 +112,7 @@ class MineServer {
       return {'message': 'Server is not running!'};
     }
     await run('save-all');
+    await run('stop');
     if (Platform.isWindows) {
       await Process.run(
         'taskkill',
