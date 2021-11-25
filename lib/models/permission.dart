@@ -11,5 +11,6 @@ enum Permission {
 
   START_SERVER,
   STOP_SERVER,
+  KILL_SERVER,
   USE_TERMINAL,
 }
