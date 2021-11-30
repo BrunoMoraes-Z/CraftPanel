@@ -68,6 +68,10 @@ class MineServer {
       args.add('-nogui');
     }
 
+    args
+      ..add('-port')
+      ..add('$serverPort');
+
     final dir = serverDir.path
         .substring(0, serverDir.path.length - 1)
         .replaceAll('\\', '/');
@@ -91,6 +95,7 @@ class MineServer {
       if ((!completer.isCompleted) &&
           RegExp(r'''Done \([0-9]{1,}\.[0-9]{3,}s\)! For help, type "help"''')
               .hasMatch(event)) {
+        gameLog!.starting.remove(id);
         completer.complete(null);
       }
     });
@@ -102,9 +107,13 @@ class MineServer {
     if (!gameLog!.running(id)) {
       return {'message': 'Server is not running!'};
     }
-    await run('stop');
-    await process.exitCode;
-    gameLog!.servers.remove(id);
+
+    await run('save-all');
+    Future.delayed(Duration(seconds: 5), () async {
+      await run('stop');
+      await process.exitCode;
+      gameLog!.servers.remove(id);
+    });
   }
 
   Future<dynamic>? kill() async {

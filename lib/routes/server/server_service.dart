@@ -139,8 +139,14 @@ class ServerService {
             },
           );
         });
+
+        svs.sort((a, b) {
+          return a['online'] as bool ? 0 : 1;
+        });
+
         return MyResponse().ok(
           {
+            'ip': config.dns,
             'amount': svs.length,
             'servers': svs,
           },

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:craft_panel/common/addons/my_response.dart';
 import 'package:craft_panel/common/constants.dart';
 import 'package:craft_panel/common/files/config_file.dart';
+import 'package:craft_panel/common/game/game_log.dart';
 import 'package:craft_panel/common/game/mine_server.dart';
 import 'package:craft_panel/routes/server/server_service.dart';
 import 'package:shelf/shelf.dart';
@@ -48,6 +49,14 @@ class ActionService {
             'message': 'Server esta ligado.',
           },
         );
+      }
+
+      if (gameLog!.starting.contains(serverId)) {
+        return MyResponse().notFound({
+          'message': 'Server esta ligando...',
+        });
+      } else {
+        gameLog!.starting.add(serverId);
       }
 
       var serverDir = Directory.fromUri(
@@ -143,7 +152,7 @@ class ActionService {
       );
     });
 
-    // Desliga o servidor
+    // Mata o servidor
     route.post('/<serverId>/kill', (Request request, String serverId) async {
       var validId = validator(serverId);
       if (validId != null) return validId;

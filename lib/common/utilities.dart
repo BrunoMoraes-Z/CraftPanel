@@ -33,5 +33,7 @@ Future<String> localMachineIP() async {
     }
   });
 
-  return ips.isEmpty ? 'localhost' : ips.first;
+  serverIP = ips.isEmpty ? 'localhost' : ips.first;
+
+  return serverIP;
 }

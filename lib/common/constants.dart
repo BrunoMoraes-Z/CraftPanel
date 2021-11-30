@@ -7,4 +7,6 @@ late GameLog? gameLog;
 
 final secret = config.JWTSecret;
 
+late String serverIP;
+
 final sysDir = Directory.fromUri(Uri.parse(Platform.script.path)).parent;

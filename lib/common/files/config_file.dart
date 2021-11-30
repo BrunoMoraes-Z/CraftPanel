@@ -13,6 +13,7 @@ Future<bool> loadConfig() async {
     content: {
       'jwt_secret': '',
       'servers_dir': '',
+      'dns': ''
     },
   );
 
